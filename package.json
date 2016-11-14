@@ -1,6 +1,6 @@
 {
   "name": "crypto-random-string",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Generate a cryptographically strong random string",
   "license": "MIT",
   "repository": "sindresorhus/crypto-random-string",
