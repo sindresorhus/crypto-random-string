@@ -1,6 +1,6 @@
 {
   "name": "crypto-random-string",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generate a cryptographically strong random string",
   "license": "MIT",
   "repository": "sindresorhus/crypto-random-string",
@@ -10,7 +10,7 @@
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "scripts": {
     "test": "xo && ava"
