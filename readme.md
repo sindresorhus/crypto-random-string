@@ -17,18 +17,23 @@ $ npm install --save crypto-random-string
 ```js
 const cryptoRandomString = require('crypto-random-string');
 
-cryptoRandomString(10);
+cryptoRandomString.sync(10);
 //=> '2cf05d94db'
+cryptoRandomString.async(10).then( ... );
 ```
 
 
 ## API
 
-### cryptoRandomString(length)
+### sync(length: number): string
 
 #### length
 
-Type: `number`
+Length of the returned string.
+
+### async(length: number): Promise<string>
+
+#### length
 
 Length of the returned string.
 
