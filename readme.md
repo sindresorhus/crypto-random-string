@@ -26,6 +26,8 @@ cryptoRandomString(10);
 
 ### cryptoRandomString(length)
 
+Returns a [`hex`](https://en.wikipedia.org/wiki/Hexadecimal) string.
+
 #### length
 
 Type: `number`
