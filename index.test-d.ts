@@ -1,4 +1,4 @@
 import {expectType} from 'tsd';
-import generate = require('.');
+import cryptoRandomString = require('.');
 
-expectType<string>(generate(10));
+expectType<string>(cryptoRandomString(10));
