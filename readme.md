@@ -8,7 +8,7 @@ Can be useful for creating an identifier, slug, salt, fixture, etc.
 ## Install
 
 ```
-$ npm install --save crypto-random-string
+$ npm install crypto-random-string
 ```
 
 
