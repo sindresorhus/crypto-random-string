@@ -12,6 +12,6 @@ cryptoRandomString(10);
 //=> '2cf05d94db'
 ```
 */
-declare function cryptoRandomString(length: number): string;
+declare function cryptoRandomString(length: number, opts?: {type?: 'hex' | 'base64' | 'url-safe', characters?: string}): string;
 
 export = cryptoRandomString;
