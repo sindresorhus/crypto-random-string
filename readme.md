@@ -19,20 +19,49 @@ const cryptoRandomString = require('crypto-random-string');
 
 cryptoRandomString(10);
 //=> '2cf05d94db'
+
+cryptoRandomString(10, {type: 'hex'});
+//=> 'c00f094c79'
+
+cryptoRandomString(10, {type: 'base64'});
+//=> 'YMiMbaQl6I'
+
+cryptoRandomString(10, {type: 'url-safe'});
+//=> 'YN-tqc8pOw'
+
+cryptoRandomString(10, {characters: '1234567890'});
+//=> '1791935639'
 ```
 
 
 ## API
 
-### cryptoRandomString(length)
+### cryptoRandomString(length, [options])
 
-Returns a [`hex`](https://en.wikipedia.org/wiki/Hexadecimal) string.
+Returns a randomized string. [`hex`](https://en.wikipedia.org/wiki/Hexadecimal) by default.
 
 #### length
 
 Type: `number`
 
 Length of the returned string.
+
+#### options
+
+Type: `Object`
+
+##### type
+
+Type: `string`
+Values: `hex` `base64` `url-safe`
+
+Setting this option makes it select characters from relevant set. Can not be set at the same time as `characters`
+
+##### characters
+
+Type: `string`
+
+Setting this option makes it select characters from the string. Can not be set at the same time as `type`.
 
 
 ## Related
