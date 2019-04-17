@@ -6,7 +6,7 @@ const urlSafeChars = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345
 const generateForCustomChars = (length, chars) => {
 	// Generating entropy is faster than complex math operations in js, so we use the simplest way
 	const charNum = chars.length;
-	const maxValidSelector = Math.floor(0x10000 / charNum) * charNum - 1;
+	const maxValidSelector = (Math.floor(0x10000 / charNum) * charNum) - 1;
 	const entropyLen = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
 	let entropyPos;
 	let entropy;
