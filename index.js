@@ -4,32 +4,30 @@ const crypto = require('crypto');
 const urlSafeChars = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
 const generateForCustomChars = (length, chars) => {
-	// Generating entropy is faster than complex math operations in js, so we use the simplest way
+	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const charNum = chars.length;
-	const maxValidSelector = (Math.floor(0x10000 / charNum) * charNum) - 1;
-	const entropyLen = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
-	let entropyPos;
-	let entropy;
-	let str = '';
-	let strLen = 0;
+	const maxValidSelector = (Math.floor(0x10000 / charNum) * charNum) - 1; // Using values above this will ruin distribution when using modular division
+	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
+	let string = '';
+	let stringLength = 0;
 
-	while (strLen < length) {
-		entropy = crypto.randomBytes(entropyLen);
-		entropyPos = 0;
+	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
+		const entropy = crypto.randomBytes(entropyLength);
+		let entropyPosition = 0;
 
-		while (entropyPos < entropyLen && strLen < length) {
-			const num = entropy.readUInt16LE(entropyPos);
-			entropyPos += 2;
-			if (num > maxValidSelector) {
+		while (entropyPosition < entropyLength && stringLength < length) {
+			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			entropyPosition += 2;
+			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
 				continue;
 			}
 
-			str += chars[num % charNum];
-			strLen++;
+			string += chars[entropyValue % charNum];
+			stringLength++;
 		}
 	}
 
-	return str;
+	return string;
 };
 
 const allowedTypes = [undefined, 'hex', 'base64', 'url-safe'];
@@ -59,15 +57,19 @@ module.exports = (length, opts) => {
 	}
 
 	if (type === 'hex') {
-		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length);
+		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
 	}
 
 	if (type === 'base64') {
-		return crypto.randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length);
+		return crypto.randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
 	}
 
 	if (type === 'url-safe') {
 		return generateForCustomChars(length, urlSafeChars);
+	}
+
+	if (characters.length > 0x10000) {
+		throw new TypeError('Expected `characters` string length to be less or equal to 65536');
 	}
 
 	return generateForCustomChars(length, characters.split(''));
