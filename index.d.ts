@@ -1,3 +1,8 @@
+interface Options {
+	type?: 'hex' | 'base64' | 'url-safe';
+	characters?: string;
+}
+
 /**
 Generate a [cryptographically strong](https://en.m.wikipedia.org/wiki/Strong_cryptography) random string.
 
@@ -14,6 +19,6 @@ cryptoRandomString(10);
 //=> '2cf05d94db'
 ```
 */
-declare function cryptoRandomString(length: number, opts?: {type?: 'hex' | 'base64' | 'url-safe', characters?: string}): string;
+declare function cryptoRandomString(length: number, options?: Options): string;
 
 export = cryptoRandomString;
