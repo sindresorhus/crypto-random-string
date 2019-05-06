@@ -48,7 +48,7 @@ Length of the returned string.
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### type
 
@@ -61,7 +61,7 @@ Setting this option makes it select characters from relevant set. Can not be set
 
 Type: `string`
 
-Setting this option makes it select characters from the string. Can not be set at the same time as `type`. Maximum length 65536.
+Setting this option makes it select characters from the string. Can not be set at the same time as `type`. Minimum length 1, maximum length 65536.
 
 
 ## Related

@@ -3,10 +3,10 @@ const crypto = require('crypto');
 
 const urlSafeChars = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
-const generateForCustomChars = (length, chars) => {
+const generateForCustomCharacters = (length, chars) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
-	const charNum = chars.length;
-	const maxValidSelector = (Math.floor(0x10000 / charNum) * charNum) - 1; // Using values above this will ruin distribution when using modular division
+	const characterCount = chars.length;
+	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
 	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
 	let string = '';
 	let stringLength = 0;
@@ -22,7 +22,7 @@ const generateForCustomChars = (length, chars) => {
 				continue;
 			}
 
-			string += chars[entropyValue % charNum];
+			string += chars[entropyValue % characterCount];
 			stringLength++;
 		}
 	}
@@ -56,7 +56,7 @@ module.exports = (length, opts) => {
 		type = 'hex';
 	}
 
-	if (type === 'hex') {
+	if (type === 'hex' || (type === undefined && characters === undefined)) {
 		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
 	}
 
@@ -65,12 +65,16 @@ module.exports = (length, opts) => {
 	}
 
 	if (type === 'url-safe') {
-		return generateForCustomChars(length, urlSafeChars);
+		return generateForCustomCharacters(length, urlSafeChars);
+	}
+
+	if (characters.length === 0) {
+		throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
 	}
 
 	if (characters.length > 0x10000) {
 		throw new TypeError('Expected `characters` string length to be less or equal to 65536');
 	}
 
-	return generateForCustomChars(length, characters.split(''));
+	return generateForCustomCharacters(length, characters.split(''));
 };
