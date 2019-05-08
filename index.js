@@ -1,11 +1,11 @@
 'use strict';
 const crypto = require('crypto');
 
-const urlSafeChars = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
+const urlSafeCharacters = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
-const generateForCustomCharacters = (length, chars) => {
+const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
-	const characterCount = chars.length;
+	const characterCount = characters.length;
 	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
 	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
 	let string = '';
@@ -22,7 +22,7 @@ const generateForCustomCharacters = (length, chars) => {
 				continue;
 			}
 
-			string += chars[entropyValue % characterCount];
+			string += characters[entropyValue % characterCount];
 			stringLength++;
 		}
 	}
@@ -30,15 +30,17 @@ const generateForCustomCharacters = (length, chars) => {
 	return string;
 };
 
-const allowedTypes = [undefined, 'hex', 'base64', 'url-safe'];
+const allowedTypes = [
+	undefined,
+	'hex',
+	'base64',
+	'url-safe'
+];
 
-module.exports = (length, opts) => {
+module.exports = ({length, type, characters}) => {
 	if (!Number.isFinite(length)) {
 		throw new TypeError('Expected a finite number');
 	}
-
-	let type = opts === undefined ? undefined : opts.type;
-	const characters = opts === undefined ? undefined : opts.characters;
 
 	if (type !== undefined && characters !== undefined) {
 		throw new TypeError('Expected either type or characters');
@@ -65,7 +67,7 @@ module.exports = (length, opts) => {
 	}
 
 	if (type === 'url-safe') {
-		return generateForCustomCharacters(length, urlSafeChars);
+		return generateForCustomCharacters(length, urlSafeCharacters);
 	}
 
 	if (characters.length === 0) {
