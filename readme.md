@@ -38,7 +38,7 @@ cryptoRandomString(10, {characters: '1234567890'});
 
 ### cryptoRandomString(length, [options])
 
-Returns a randomized string. [`hex`](https://en.wikipedia.org/wiki/Hexadecimal) by default.
+Returns a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
 
 #### length
 
@@ -52,16 +52,23 @@ Type: `object`
 
 ##### type
 
-Type: `string`
+Type: `string`<br>
+Default: `hex`<br>
 Values: `hex` `base64` `url-safe`
 
-Setting this option makes it select characters from relevant set. Can not be set at the same time as `characters`
+Use only characters from a predefined set of allowed characters.
+
+Cannot be set at the same time as the `characters` option.
 
 ##### characters
 
-Type: `string`
+Type: `string`<br>
+Minimum length: `1`<br>
+Maximum length: `65536`
 
-Setting this option makes it select characters from the string. Can not be set at the same time as `type`. Minimum length 1, maximum length 65536.
+Use only characters from a custom set of allowed characters.
+
+Cannot be set at the same time as the `type` option.
 
 
 ## Related
