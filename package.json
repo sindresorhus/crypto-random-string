@@ -32,6 +32,9 @@
 		"secure",
 		"hex"
 	],
+	"dependencies": {
+		"type-fest": "^0.4.1"
+	},
 	"devDependencies": {
 		"ava": "^1.4.1",
 		"tsd": "^0.7.2",
