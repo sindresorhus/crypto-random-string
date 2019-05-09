@@ -42,6 +42,10 @@ module.exports = ({length, type, characters}) => {
 		throw new TypeError('Expected a finite number');
 	}
 
+	if (length < 0) {
+		throw new RangeError('Expected a positive numbers');
+	}
+
 	if (type !== undefined && characters !== undefined) {
 		throw new TypeError('Expected either type or characters');
 	}

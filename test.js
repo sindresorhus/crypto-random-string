@@ -42,6 +42,10 @@ test('argument errors', t => {
 	});
 
 	t.throws(() => {
+		cryptoRandomString({length: -1});
+	});
+
+	t.throws(() => {
 		cryptoRandomString({length: 0, type: 'hex', characters: '1234'});
 	});
 
