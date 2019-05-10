@@ -72,7 +72,7 @@ module.exports = ({length, type, characters}) => {
 	if (type === 'url-safe') {
 		return generateForCustomCharacters(length, urlSafeCharacters);
 	}
-	
+
 	if (type === 'printable') {
 		return generateForCustomCharacters(length, printableCharacters);
 	}
