@@ -29,6 +29,13 @@ test('url-safe', t => {
 	t.regex(cryptoRandomString({length: 100, type: 'url-safe'}), /^[a-zA-Z\d._~-]*$/); // Sanity check, probabilistic
 });
 
+test('printable', t => {
+	t.is(cryptoRandomString({length: 0, type: 'printable'}).length, 0);
+	t.is(cryptoRandomString({length: 10, type: 'printable'}).length, 10);
+	t.is(cryptoRandomString({length: 100, type: 'printable'}).length, 100);
+	t.regex(cryptoRandomString({length: 100, type: 'printable'}), /^[ !"#$%&'()*+,-./\d:;<=>?@A-Z[\\\]\^_`a-z{\|}~]*$/); // Sanity check, probabilistic
+});
+
 test('characters', t => {
 	t.is(cryptoRandomString({length: 0, characters: '1234'}).length, 0);
 	t.is(cryptoRandomString({length: 10, characters: '1234'}).length, 10);

@@ -3,6 +3,8 @@ const crypto = require('crypto');
 
 const urlSafeCharacters = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
+const printableCharacters = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'.split('');
+
 const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
@@ -34,7 +36,8 @@ const allowedTypes = [
 	undefined,
 	'hex',
 	'base64',
-	'url-safe'
+	'url-safe',
+	'printable'
 ];
 
 module.exports = ({length, type, characters}) => {
@@ -68,6 +71,10 @@ module.exports = ({length, type, characters}) => {
 
 	if (type === 'url-safe') {
 		return generateForCustomCharacters(length, urlSafeCharacters);
+	}
+	
+	if (type === 'printable') {
+		return generateForCustomCharacters(length, printableCharacters);
 	}
 
 	if (characters.length === 0) {
