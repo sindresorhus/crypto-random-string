@@ -38,16 +38,16 @@ const allowedTypes = [
 ];
 
 module.exports = ({length, type, characters}) => {
-	if (!Number.isFinite(length)) {
-		throw new TypeError('Expected a finite number');
+	if (!(length >= 0 && Number.isFinite(length))) {
+		throw new TypeError('Expected a `length` to be a non-negative finite number');
 	}
 
 	if (type !== undefined && characters !== undefined) {
-		throw new TypeError('Expected either type or characters');
+		throw new TypeError('Expected either `type` or `characters`');
 	}
 
 	if (characters !== undefined && typeof characters !== 'string') {
-		throw new TypeError('Expected characters to be string');
+		throw new TypeError('Expected `characters` to be string');
 	}
 
 	if (!allowedTypes.includes(type)) {
