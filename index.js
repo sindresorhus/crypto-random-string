@@ -1,7 +1,7 @@
 'use strict';
 const crypto = require('crypto');
 
-const urlSafeCharacters = 'abcdefjhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
+const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
 const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
