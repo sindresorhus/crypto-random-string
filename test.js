@@ -2,10 +2,10 @@ import test from 'ava';
 import cryptoRandomString from '.';
 
 // Probailistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656
-const generatedCharacterSetSize = (opts, targetSize) => {
+const generatedCharacterSetSize = (options, targetSize) => {
 	const set = new Set();
 	const length = targetSize * 640;
-	const string = cryptoRandomString({...opts, length});
+	const string = cryptoRandomString({...options, length});
 
 	for (let i = 0; i < length; i++) {
 		set.add(string[i]);
