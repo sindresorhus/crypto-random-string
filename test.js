@@ -5,10 +5,12 @@ import cryptoRandomString from '.';
 const generatedCharacterSetSize = (opts, targetSize) => {
 	const set = new Set();
 	const length = targetSize * 640;
-	let string = cryptoRandomString({...opts, length});
-	for(let i = 0; i < length; i++) {
+	const string = cryptoRandomString({...opts, length});
+
+	for (let i = 0; i < length; i++) {
 		set.add(string[i]);
 	}
+
 	return set.size;
 };
 
