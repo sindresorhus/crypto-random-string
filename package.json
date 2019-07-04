@@ -33,6 +33,7 @@
 		"hex"
 	],
 	"dependencies": {
+		"randombytes": "^2.1.0",
 		"type-fest": "^0.5.2"
 	},
 	"devDependencies": {

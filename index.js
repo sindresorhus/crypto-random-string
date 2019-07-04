@@ -1,5 +1,5 @@
 'use strict';
-const crypto = require('crypto');
+const randomBytes = require('randombytes');
 
 const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 
@@ -12,7 +12,7 @@ const generateForCustomCharacters = (length, characters) => {
 	let stringLength = 0;
 
 	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
-		const entropy = crypto.randomBytes(entropyLength);
+		const entropy = randomBytes(entropyLength);
 		let entropyPosition = 0;
 
 		while (entropyPosition < entropyLength && stringLength < length) {
@@ -59,11 +59,11 @@ module.exports = ({length, type, characters}) => {
 	}
 
 	if (type === 'hex' || (type === undefined && characters === undefined)) {
-		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
+		return randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
 	}
 
 	if (type === 'base64') {
-		return crypto.randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
+		return randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
 	}
 
 	if (type === 'url-safe') {
