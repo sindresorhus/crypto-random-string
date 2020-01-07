@@ -26,8 +26,11 @@ cryptoRandomString({length: 10, type: 'base64'});
 cryptoRandomString({length: 10, type: 'url-safe'});
 //=> 'YN-tqc8pOw'
 
-cryptoRandomString({length: 10, characters: '1234567890'});
-//=> '1791935639'
+cryptoRandomString({length: 10, type: 'numeric'});
+//=> '8314659141'
+
+cryptoRandomString({length: 10, characters: 'abc'});
+//=> 'abaaccabac'
 ```
 
 
@@ -52,7 +55,7 @@ Length of the returned string.
 
 Type: `string`<br>
 Default: `'hex'`<br>
-Values: `'hex'` `'base64'` `'url-safe'`
+Values: `'hex'` `'base64'` `'url-safe'` `'numeric'`
 
 Use only characters from a predefined set of allowed characters.
 
