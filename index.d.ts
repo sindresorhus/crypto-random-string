@@ -27,7 +27,7 @@ interface TypeOption {
 	//=> 'VEjfNW3Yej'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric';
 }
 
 interface CharactersOption {

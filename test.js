@@ -1,7 +1,7 @@
 import test from 'ava';
 import cryptoRandomString from '.';
 
-// Probailistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656
+// Probabilistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656
 const generatedCharacterSetSize = (options, targetSize) => {
 	const set = new Set();
 	const length = targetSize * 640;
@@ -44,6 +44,14 @@ test('url-safe', t => {
 	t.is(cryptoRandomString({length: 100, type: 'url-safe'}).length, 100);
 	t.regex(cryptoRandomString({length: 100, type: 'url-safe'}), /^[a-zA-Z\d._~-]*$/); // Sanity check, probabilistic
 	t.is(generatedCharacterSetSize({type: 'url-safe'}, 66), 66);
+});
+
+test('numeric', t => {
+	t.is(cryptoRandomString({length: 0, type: 'numeric'}).length, 0);
+	t.is(cryptoRandomString({length: 10, type: 'numeric'}).length, 10);
+	t.is(cryptoRandomString({length: 100, type: 'numeric'}).length, 100);
+	t.regex(cryptoRandomString({length: 100, type: 'numeric'}), /^[\d]*$/); // Sanity check, probabilistic
+	t.is(generatedCharacterSetSize({type: 'numeric'}, 10), 10);
 });
 
 test('characters', t => {
