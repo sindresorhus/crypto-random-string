@@ -2,15 +2,13 @@
 
 > Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string
 
-Can be useful for creating an identifier, slug, salt, fixture, etc.
-
+Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc.
 
 ## Install
 
 ```
 $ npm install crypto-random-string
 ```
-
 
 ## Usage
 
@@ -33,7 +31,6 @@ cryptoRandomString({length: 10, characters: 'abc'});
 //=> 'abaaccabac'
 ```
 
-
 ## API
 
 ### cryptoRandomString(options)
@@ -46,16 +43,16 @@ Type: `object`
 
 ##### length
 
-*Required*<br>
+*Required*\
 Type: `number`
 
 Length of the returned string.
 
 ##### type
 
-Type: `string`<br>
-Default: `'hex'`<br>
-Values: `'hex'` `'base64'` `'url-safe'` `'numeric'`
+Type: `string`\
+Default: `'hex'`\
+Values: `'hex' | 'base64' | 'url-safe' | 'numeric'`
 
 Use only characters from a predefined set of allowed characters.
 
@@ -63,14 +60,13 @@ Cannot be set at the same time as the `characters` option.
 
 ##### characters
 
-Type: `string`<br>
-Minimum length: `1`<br>
+Type: `string`\
+Minimum length: `1`\
 Maximum length: `65536`
 
 Use only characters from a custom set of allowed characters.
 
 Cannot be set at the same time as the `type` option.
-
 
 ## Related
 
@@ -81,7 +77,6 @@ Cannot be set at the same time as the `type` option.
 - [random-obj-key](https://github.com/sindresorhus/random-obj-key) - Get a random key from an object
 - [random-obj-prop](https://github.com/sindresorhus/random-obj-prop) - Get a random property from an object
 - [unique-random](https://github.com/sindresorhus/unique-random) - Generate random numbers that are consecutively unique
-
 
 ---
 
