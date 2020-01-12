@@ -20,14 +20,17 @@ interface TypeOption {
 	cryptoRandomString({length: 10});
 	//=> '87fc70e2b9'
 
-	cryptoRandomString({length: 10, type:'base64'});
+	cryptoRandomString({length: 10, type: 'base64'});
 	//=> 'mhsX7xmIv/'
 
-	cryptoRandomString({length: 10, type:'url-safe'});
+	cryptoRandomString({length: 10, type: 'url-safe'});
 	//=> 'VEjfNW3Yej'
+
+	cryptoRandomString({length: 10, type: 'numeric'});
+	//=> '8314659141'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric';
 }
 
 interface CharactersOption {
@@ -41,7 +44,7 @@ interface CharactersOption {
 
 	@example
 	```
-	cryptoRandomString({length: 10, characters:'0123456789'});
+	cryptoRandomString({length: 10, characters: '0123456789'});
 	//=> '8796225811'
 	```
 	*/
