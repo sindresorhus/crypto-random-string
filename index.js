@@ -1,5 +1,8 @@
 'use strict';
 const crypto = require('crypto');
+const pify = require('pify');
+
+const randomBytesAsync = pify(crypto.randomBytes);
 
 const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 const numericCharacters = '0123456789'.split('');
@@ -31,6 +34,34 @@ const generateForCustomCharacters = (length, characters) => {
 	return string;
 };
 
+const generateForCustomCharactersAsync = async (length, characters) => {
+	// Generating entropy is faster than complex math operations, so we use the simplest way
+	const characterCount = characters.length;
+	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
+	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
+	let string = '';
+	let stringLength = 0;
+
+	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
+		/* eslint-disable-next-line no-await-in-loop */
+		const entropy = await randomBytesAsync(entropyLength);
+		let entropyPosition = 0;
+
+		while (entropyPosition < entropyLength && stringLength < length) {
+			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			entropyPosition += 2;
+			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
+				continue;
+			}
+
+			string += characters[entropyValue % characterCount];
+			stringLength++;
+		}
+	}
+
+	return string;
+};
+
 const allowedTypes = [
 	undefined,
 	'hex',
@@ -39,50 +70,58 @@ const allowedTypes = [
 	'numeric'
 ];
 
-module.exports = ({length, type, characters}) => {
-	if (!(length >= 0 && Number.isFinite(length))) {
-		throw new TypeError('Expected a `length` to be a non-negative finite number');
-	}
+const createGenerator = ({sync}) => {
+	const randomBytes = sync ? crypto.randomBytes : randomBytesAsync;
+	const generateCustom = sync ? generateForCustomCharacters : generateForCustomCharactersAsync;
 
-	if (type !== undefined && characters !== undefined) {
-		throw new TypeError('Expected either `type` or `characters`');
-	}
+	return ({length, type, characters}) => {
+		if (!(length >= 0 && Number.isFinite(length))) {
+			throw new TypeError('Expected a `length` to be a non-negative finite number');
+		}
 
-	if (characters !== undefined && typeof characters !== 'string') {
-		throw new TypeError('Expected `characters` to be string');
-	}
+		if (type !== undefined && characters !== undefined) {
+			throw new TypeError('Expected either `type` or `characters`');
+		}
 
-	if (!allowedTypes.includes(type)) {
-		throw new TypeError(`Unknown type: ${type}`);
-	}
+		if (characters !== undefined && typeof characters !== 'string') {
+			throw new TypeError('Expected `characters` to be string');
+		}
 
-	if (type === undefined && characters === undefined) {
-		type = 'hex';
-	}
+		if (!allowedTypes.includes(type)) {
+			throw new TypeError(`Unknown type: ${type}`);
+		}
 
-	if (type === 'hex' || (type === undefined && characters === undefined)) {
-		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
-	}
+		if (type === undefined && characters === undefined) {
+			type = 'hex';
+		}
 
-	if (type === 'base64') {
-		return crypto.randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
-	}
+		if (type === 'hex' || (type === undefined && characters === undefined)) {
+			return randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
+		}
 
-	if (type === 'url-safe') {
-		return generateForCustomCharacters(length, urlSafeCharacters);
-	}
+		if (type === 'base64') {
+			return randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
+		}
 
-	if (type === 'numeric') {
-		return generateForCustomCharacters(length, numericCharacters);
-	}
+		if (type === 'url-safe') {
+			return generateCustom(length, urlSafeCharacters);
+		}
 
-	if (characters.length === 0) {
-		throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
-	}
+		if (type === 'numeric') {
+			return generateCustom(length, numericCharacters);
+		}
 
-	if (characters.length > 0x10000) {
-		throw new TypeError('Expected `characters` string length to be less or equal to 65536');
-	}
+		if (characters.length === 0) {
+			throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
+		}
 
-	return generateForCustomCharacters(length, characters.split(''));
+		if (characters.length > 0x10000) {
+			throw new TypeError('Expected `characters` string length to be less or equal to 65536');
+		}
+
+		return generateCustom(length, characters.split(''));
+	};
 };
+
+module.exports = createGenerator({sync: true});
+module.exports.async = createGenerator({sync: false});

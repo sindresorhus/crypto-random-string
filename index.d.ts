@@ -55,19 +55,36 @@ declare namespace cryptoRandomString {
 	type Options = BaseOptions & MergeExclusive<TypeOption, CharactersOption>;
 }
 
-/**
-Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
+declare const cryptoRandomString: {
+	/**
+	Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
 
-@returns A randomized string.
+	@returns A randomized string.
 
-@example
-```
-import cryptoRandomString = require('crypto-random-string');
+	@example
+	```
+	import cryptoRandomString = require('crypto-random-string');
 
-cryptoRandomString({length: 10});
-//=> '2cf05d94db'
-```
-*/
-declare function cryptoRandomString(options?: cryptoRandomString.Options): string;
+	cryptoRandomString({length: 10});
+	//=> '2cf05d94db'
+	```
+	*/
+	(options?: cryptoRandomString.Options): string;
+
+	/**
+	Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
+
+	@returns A promise that resolves with a randomized string.
+
+	@example
+	```
+	import {async as cryptoRandomString} = require('crypto-random-string');
+
+	await cryptoRandomString({length: 10});
+	//=> '2cf05d94db'
+	```
+	*/
+	async(options?: cryptoRandomString.Options): Promise<string>;
+};
 
 export = cryptoRandomString;

@@ -36,6 +36,7 @@
 		"protect"
 	],
 	"dependencies": {
+		"pify": "^4.0.1",
 		"type-fest": "^0.8.1"
 	},
 	"devDependencies": {
