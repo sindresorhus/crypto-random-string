@@ -22,6 +22,14 @@ test('main', t => {
 	t.is(generatedCharacterSetSize({}, 16), 16);
 });
 
+test('main - async', async t => {
+	t.is((await cryptoRandomString({length: 0}).length), 0);
+	t.is((await cryptoRandomString({length: 10}).length), 10);
+	t.is((await cryptoRandomString({length: 100}).length), 100);
+	t.regex((await cryptoRandomString({length: 100})), /^[a-f\d]*$/); // Sanity check, probabilistic
+	t.is((await generatedCharacterSetSize({}, 16)), 16);
+});
+
 test('hex', t => {
 	t.is(cryptoRandomString({length: 0, type: 'hex'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'hex'}).length, 10);

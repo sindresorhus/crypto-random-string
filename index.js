@@ -7,6 +7,15 @@ const randomBytesAsync = pify(crypto.randomBytes);
 const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 const numericCharacters = '0123456789'.split('');
 
+const generateRandomAsync = async (byteLength, type, length) => {
+	const buf = await randomBytesAsync(byteLength);
+	return buf.toString(type).slice(0, length);
+};
+
+const generateRandomSync = (byteLength, type, length) => {
+	return crypto.randomBytes(byteLength).toString(type).slice(0, length);
+};
+
 const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
@@ -71,7 +80,7 @@ const allowedTypes = [
 ];
 
 const createGenerator = ({sync}) => {
-	const randomBytes = sync ? crypto.randomBytes : randomBytesAsync;
+	const randomBytes = sync ? generateRandomSync : generateRandomAsync;
 	const generateCustom = sync ? generateForCustomCharacters : generateForCustomCharactersAsync;
 
 	return ({length, type, characters}) => {
@@ -96,11 +105,11 @@ const createGenerator = ({sync}) => {
 		}
 
 		if (type === 'hex' || (type === undefined && characters === undefined)) {
-			return randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
+			return randomBytes(Math.ceil(length * 0.5), type, length); // Need 0.5 byte entropy per character
 		}
 
 		if (type === 'base64') {
-			return randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
+			return randomBytes(Math.ceil(length * 0.75), type, length); // Need 0.75 byte of entropy per character
 		}
 
 		if (type === 'url-safe') {
