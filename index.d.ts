@@ -11,6 +11,14 @@ interface TypeOption {
 	/**
 	Use only characters from a predefined set of allowed characters.
 
+	"distinguishable" set contains only uppercase characters are not easily confused:
+
+    CDEHKMPRTUWXY012458
+
+	The distinguishable character set is useful if you need to print out a short
+	string that you'd like user's to read and type back in with minimal errors. For
+	example, reading a code off of a screen that needs to be typed into a phone to
+	connect the two devices.
 	Cannot be set at the same time as the `characters` option.
 
 	@default 'hex'
@@ -28,9 +36,13 @@ interface TypeOption {
 
 	cryptoRandomString({length: 10, type: 'numeric'});
 	//=> '8314659141'
+
+	cryptoRandomString({length: 6, type: 'distinguishable'});
+	//=> 'CDEHKM'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe' | 'numeric';
+
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable';
 }
 
 interface CharactersOption {

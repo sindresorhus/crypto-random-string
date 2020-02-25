@@ -9,6 +9,9 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "sindresorhus.com"
 	},
+  "contributors": [
+    "Mark Stosberg <mark@rideamigos.com>"
+  ],
 	"engines": {
 		"node": ">=8"
 	},
