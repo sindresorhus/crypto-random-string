@@ -58,16 +58,10 @@ Default: `'hex'`\
 Values: `'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable'`
 
 Use only characters from a predefined set of allowed characters.
-"distinguishable" set contains only uppercase characters are not easily confused:
 
-    CDEHKMPRTUWXY012458
+Cannot be set at the same time as the `characters` option.
 
-The distinguishable character set is useful if you need to print out a short
-string that you'd like user's to read and type back in with minimal errors. For
-example, reading a code off of a screen that needs to be typed into a phone to
-connect the two devices.
-
-`type` cannot be set at the same time as the `characters` option.
+The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
 
 ##### characters
 
