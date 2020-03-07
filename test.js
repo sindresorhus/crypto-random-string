@@ -54,6 +54,14 @@ test('numeric', t => {
 	t.is(generatedCharacterSetSize({type: 'numeric'}, 10), 10);
 });
 
+test('distinquishable', t => {
+	t.is(cryptoRandomString({length: 0, type: 'distinguishable'}).length, 0);
+	t.is(cryptoRandomString({length: 10, type: 'distinguishable'}).length, 10);
+	t.is(cryptoRandomString({length: 100, type: 'distinguishable'}).length, 100);
+	t.regex(cryptoRandomString({length: 100, type: 'distinguishable'}), /^[CDEHKMPRTUWXY012458]*$/); // Sanity check, probabilistic
+	t.is(generatedCharacterSetSize({type: 'distinguishable'}, 19), 19);
+});
+
 test('characters', t => {
 	t.is(cryptoRandomString({length: 0, characters: '1234'}).length, 0);
 	t.is(cryptoRandomString({length: 10, characters: '1234'}).length, 10);

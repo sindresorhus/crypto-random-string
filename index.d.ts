@@ -15,6 +15,8 @@ interface TypeOption {
 
 	@default 'hex'
 
+	The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
+
 	@example
 	```
 	cryptoRandomString({length: 10});
@@ -28,9 +30,12 @@ interface TypeOption {
 
 	cryptoRandomString({length: 10, type: 'numeric'});
 	//=> '8314659141'
+
+	cryptoRandomString({length: 6, type: 'distinguishable'});
+	//=> 'CDEHKM'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe' | 'numeric';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable';
 }
 
 interface CharactersOption {

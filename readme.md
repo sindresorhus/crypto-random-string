@@ -27,6 +27,9 @@ cryptoRandomString({length: 10, type: 'url-safe'});
 cryptoRandomString({length: 10, type: 'numeric'});
 //=> '8314659141'
 
+cryptoRandomString({length: 6, type: 'distinguishable'});
+//=> 'CDEHKM'
+
 cryptoRandomString({length: 10, characters: 'abc'});
 //=> 'abaaccabac'
 ```
@@ -52,11 +55,13 @@ Length of the returned string.
 
 Type: `string`\
 Default: `'hex'`\
-Values: `'hex' | 'base64' | 'url-safe' | 'numeric'`
+Values: `'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable'`
 
 Use only characters from a predefined set of allowed characters.
 
 Cannot be set at the same time as the `characters` option.
+
+The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
 
 ##### characters
 
