@@ -27,11 +27,11 @@ cryptoRandomString({length: 10, type: 'url-safe'});
 cryptoRandomString({length: 10, type: 'numeric'});
 //=> '8314659141'
 
-cryptoRandomString({length: 10, characters: 'abc'});
-//=> 'abaaccabac'
-
 cryptoRandomString({length: 6, type: 'distinguishable'});
 //=> 'CDEHKM'
+
+cryptoRandomString({length: 10, characters: 'abc'});
+//=> 'abaaccabac'
 ```
 
 ## API
