@@ -54,7 +54,7 @@ test('numeric', t => {
 	t.is(generatedCharacterSetSize({type: 'numeric'}, 10), 10);
 });
 
-test('distinquishable', t => {
+test('distinguishable', t => {
 	t.is(cryptoRandomString({length: 0, type: 'distinguishable'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'distinguishable'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'distinguishable'}).length, 100);
