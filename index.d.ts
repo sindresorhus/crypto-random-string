@@ -35,7 +35,7 @@ interface TypeOption {
 	//=> 'CDEHKM'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'alphanumeric';
 }
 
 interface CharactersOption {

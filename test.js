@@ -62,6 +62,14 @@ test('distinquishable', t => {
 	t.is(generatedCharacterSetSize({type: 'distinguishable'}, 19), 19);
 });
 
+test('alphanumeric', t => {
+	t.is(cryptoRandomString({length: 0, type: 'alphanumeric'}).length, 0);
+	t.is(cryptoRandomString({length: 10, type: 'alphanumeric'}).length, 10);
+	t.is(cryptoRandomString({length: 100, type: 'alphanumeric'}).length, 100);
+	t.regex(cryptoRandomString({length: 100, type: 'alphanumeric'}), /^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789]*$/); // Sanity check, probabilistic
+	t.is(generatedCharacterSetSize({type: 'alphanumeric'}, 19), 62);
+});
+
 test('characters', t => {
 	t.is(cryptoRandomString({length: 0, characters: '1234'}).length, 0);
 	t.is(cryptoRandomString({length: 10, characters: '1234'}).length, 10);
