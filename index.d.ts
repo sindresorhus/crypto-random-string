@@ -1,4 +1,4 @@
-import {MergeExclusive} from 'type-fest';
+import { MergeExclusive } from 'type-fest';
 
 interface BaseOptions {
 	/**
@@ -35,7 +35,7 @@ interface TypeOption {
 	//=> 'CDEHKM'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable';
 }
 
 interface CharactersOption {
