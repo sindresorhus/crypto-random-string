@@ -1,4 +1,4 @@
-import { MergeExclusive } from 'type-fest';
+import {MergeExclusive} from 'type-fest';
 
 interface BaseOptions {
 	/**
