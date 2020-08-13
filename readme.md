@@ -42,7 +42,7 @@ Returns a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by
 
 ### cryptoRandomString.async(options)
 
-Returns promise which resolves with a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
+Returns a promise which resolves to a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
 
 #### options
 
