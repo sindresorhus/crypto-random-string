@@ -79,7 +79,7 @@ declare const cryptoRandomString: {
 	/**
 	Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
 
-	@returns A randomized string.
+	@returns A promise which resolves to randomized string.
 
 	@example
 	```
