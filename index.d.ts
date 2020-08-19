@@ -17,7 +17,7 @@ interface TypeOption {
 
 	The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
 
-	The `alphanumeric` set contains uppercase letters, lowercase letters, and digits: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`.
+	The `alphanumeric` set contains uppercase letters, lowercase letters, and digits: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`. Useful for generating serial codes.
 
 	@example
 	```
@@ -35,6 +35,9 @@ interface TypeOption {
 
 	cryptoRandomString({length: 6, type: 'distinguishable'});
 	//=> 'CDEHKM'
+
+	cryptoRandomString({length: 10, type: 'alphanumeric'});
+	//=> 'DMuKL8YtE7'
 	```
 	*/
 	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'alphanumeric';
