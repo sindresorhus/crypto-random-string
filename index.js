@@ -1,5 +1,8 @@
 'use strict';
+const {promisify} = require('util');
 const crypto = require('crypto');
+
+const randomBytesAsync = promisify(crypto.randomBytes);
 
 const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 const numericCharacters = '0123456789'.split('');
@@ -32,6 +35,40 @@ const generateForCustomCharacters = (length, characters) => {
 	return string;
 };
 
+const generateForCustomCharactersAsync = async (length, characters) => {
+	// Generating entropy is faster than complex math operations, so we use the simplest way
+	const characterCount = characters.length;
+	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
+	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
+	let string = '';
+	let stringLength = 0;
+
+	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
+		const entropy = await randomBytesAsync(entropyLength); // eslint-disable-line no-await-in-loop
+		let entropyPosition = 0;
+
+		while (entropyPosition < entropyLength && stringLength < length) {
+			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			entropyPosition += 2;
+			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
+				continue;
+			}
+
+			string += characters[entropyValue % characterCount];
+			stringLength++;
+		}
+	}
+
+	return string;
+};
+
+const generateRandomBytes = (byteLength, type, length) => crypto.randomBytes(byteLength).toString(type).slice(0, length);
+
+const generateRandomBytesAsync = async (byteLength, type, length) => {
+	const buffer = await randomBytesAsync(byteLength);
+	return buffer.toString(type).slice(0, length);
+};
+
 const allowedTypes = [
 	undefined,
 	'hex',
@@ -41,7 +78,7 @@ const allowedTypes = [
 	'distinguishable'
 ];
 
-module.exports = ({length, type, characters}) => {
+const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({length, type, characters}) => {
 	if (!(length >= 0 && Number.isFinite(length))) {
 		throw new TypeError('Expected a `length` to be a non-negative finite number');
 	}
@@ -63,11 +100,11 @@ module.exports = ({length, type, characters}) => {
 	}
 
 	if (type === 'hex' || (type === undefined && characters === undefined)) {
-		return crypto.randomBytes(Math.ceil(length * 0.5)).toString('hex').slice(0, length); // Need 0.5 byte entropy per character
+		return generateRandomBytes(Math.ceil(length * 0.5), 'hex', length); // Need 0.5 byte entropy per character
 	}
 
 	if (type === 'base64') {
-		return crypto.randomBytes(Math.ceil(length * 0.75)).toString('base64').slice(0, length); // Need 0.75 byte of entropy per character
+		return generateRandomBytes(Math.ceil(length * 0.75), 'base64', length); // Need 0.75 byte of entropy per character
 	}
 
 	if (type === 'url-safe') {
@@ -92,3 +129,6 @@ module.exports = ({length, type, characters}) => {
 
 	return generateForCustomCharacters(length, characters.split(''));
 };
+
+module.exports = createGenerator(generateForCustomCharacters, generateRandomBytes);
+module.exports.async = createGenerator(generateForCustomCharactersAsync, generateRandomBytesAsync);
