@@ -30,6 +30,9 @@ cryptoRandomString({length: 10, type: 'numeric'});
 cryptoRandomString({length: 6, type: 'distinguishable'});
 //=> 'CDEHKM'
 
+cryptoRandomString({length: 10, type: 'ascii-printable'});
+//=> '`#Rt8$IK>B'
+
 cryptoRandomString({length: 10, characters: 'abc'});
 //=> 'abaaccabac'
 ```
@@ -59,13 +62,15 @@ Length of the returned string.
 
 Type: `string`\
 Default: `'hex'`\
-Values: `'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable'`
+Values: `'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable'`
 
 Use only characters from a predefined set of allowed characters.
 
 Cannot be set at the same time as the `characters` option.
 
 The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
+
+The `ascii-printable` set contains all [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters): ``!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`` Useful for generating passwords where all possible ASCII characters should be used.
 
 ##### characters
 

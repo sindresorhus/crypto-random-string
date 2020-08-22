@@ -7,6 +7,7 @@ const randomBytesAsync = promisify(crypto.randomBytes);
 const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
 const numericCharacters = '0123456789'.split('');
 const distinguishableCharacters = 'CDEHKMPRTUWXY012458'.split('');
+const asciiPrintableCharacters = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'.split('');
 
 const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
@@ -75,7 +76,8 @@ const allowedTypes = [
 	'base64',
 	'url-safe',
 	'numeric',
-	'distinguishable'
+	'distinguishable',
+	'ascii-printable'
 ];
 
 const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({length, type, characters}) => {
@@ -117,6 +119,10 @@ const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({
 
 	if (type === 'distinguishable') {
 		return generateForCustomCharacters(length, distinguishableCharacters);
+	}
+
+	if (type === 'ascii-printable') {
+		return generateForCustomCharacters(length, asciiPrintableCharacters);
 	}
 
 	if (characters.length === 0) {
