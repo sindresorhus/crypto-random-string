@@ -66,7 +66,7 @@ test('ascii-printable', t => {
 	t.is(cryptoRandomString({length: 0, type: 'ascii-printable'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'ascii-printable'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'ascii-printable'}).length, 100);
-	t.regex(cryptoRandomString({length: 100, type: 'ascii-printable'}), /^[ !"#$%&'()*+,-./\d:;<=>?@A-Z[\\\]^_`a-z{|}~]*$/); // Sanity check, probabilistic
+	t.regex(cryptoRandomString({length: 100, type: 'ascii-printable'}), /^[!"#$%&'()*+,-./\d:;<=>?@A-Z[\\\]^_`a-z{|}~]*$/); // Sanity check, probabilistic
 });
 
 test('characters', t => {
