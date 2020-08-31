@@ -79,7 +79,7 @@ const allowedTypes = [
 	'numeric',
 	'distinguishable',
 	'ascii-printable',
-  'alphanumeric'
+	'alphanumeric'
 ];
 
 const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({length, type, characters}) => {
