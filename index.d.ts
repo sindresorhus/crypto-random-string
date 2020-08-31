@@ -40,6 +40,9 @@ interface TypeOption {
 
 	cryptoRandomString({length: 10, type: 'ascii-printable'});
 	//=> '`#Rt8$IK>B'
+	
+	cryptoRandomString({length: 10, type: 'alphanumeric'});
+	//=> 'DMuKL8YtE7'
 	```
 	*/
 	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable' | 'alphanumeric';
