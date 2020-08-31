@@ -22,6 +22,13 @@ test('main', t => {
 	t.is(generatedCharacterSetSize({}, 16), 16);
 });
 
+test('async', async t => {
+	t.is((await cryptoRandomString.async({length: 0})).length, 0);
+	t.is((await cryptoRandomString.async({length: 10})).length, 10);
+	t.is((await cryptoRandomString.async({length: 100})).length, 100);
+	t.regex(await cryptoRandomString.async({length: 100}), /^[a-f\d]*$/); // Sanity check, probabilistic
+});
+
 test('hex', t => {
 	t.is(cryptoRandomString({length: 0, type: 'hex'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'hex'}).length, 10);
@@ -54,12 +61,19 @@ test('numeric', t => {
 	t.is(generatedCharacterSetSize({type: 'numeric'}, 10), 10);
 });
 
-test('distinquishable', t => {
+test('distinguishable', t => {
 	t.is(cryptoRandomString({length: 0, type: 'distinguishable'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'distinguishable'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'distinguishable'}).length, 100);
 	t.regex(cryptoRandomString({length: 100, type: 'distinguishable'}), /^[CDEHKMPRTUWXY012458]*$/); // Sanity check, probabilistic
 	t.is(generatedCharacterSetSize({type: 'distinguishable'}, 19), 19);
+});
+
+test('ascii-printable', t => {
+	t.is(cryptoRandomString({length: 0, type: 'ascii-printable'}).length, 0);
+	t.is(cryptoRandomString({length: 10, type: 'ascii-printable'}).length, 10);
+	t.is(cryptoRandomString({length: 100, type: 'ascii-printable'}).length, 100);
+	t.regex(cryptoRandomString({length: 100, type: 'ascii-printable'}), /^[!"#$%&'()*+,-./\d:;<=>?@A-Z[\\\]^_`a-z{|}~]*$/); // Sanity check, probabilistic
 });
 
 test('alphanumeric', t => {
