@@ -123,13 +123,13 @@ const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({
 		return generateForCustomCharacters(length, distinguishableCharacters);
 	}
 
-  if (type === 'ascii-printable') {
+	if (type === 'ascii-printable') {
 		return generateForCustomCharacters(length, asciiPrintableCharacters);
 	}
   
 	if (type === 'alphanumeric') {
 		return generateForCustomCharacters(length, alphanumericCharacters);
-  }
+	}
 
 	if (characters.length === 0) {
 		throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
