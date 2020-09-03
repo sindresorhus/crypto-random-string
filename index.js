@@ -126,7 +126,7 @@ const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({
 	if (type === 'ascii-printable') {
 		return generateForCustomCharacters(length, asciiPrintableCharacters);
 	}
-  
+
 	if (type === 'alphanumeric') {
 		return generateForCustomCharacters(length, alphanumericCharacters);
 	}
