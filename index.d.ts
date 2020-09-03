@@ -19,6 +19,8 @@ interface TypeOption {
 
 	The `ascii-printable` set contains all [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters): ``!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`` Useful for generating passwords where all possible ASCII characters should be used.
 
+	The `alphanumeric` set contains uppercase letters, lowercase letters, and digits: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`. Useful for generating [nonce](https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/nonce) values.
+
 	@example
 	```
 	cryptoRandomString({length: 10});
@@ -38,9 +40,12 @@ interface TypeOption {
 
 	cryptoRandomString({length: 10, type: 'ascii-printable'});
 	//=> '`#Rt8$IK>B'
+	
+	cryptoRandomString({length: 10, type: 'alphanumeric'});
+	//=> 'DMuKL8YtE7'
 	```
 	*/
-	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable';
+	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable' | 'alphanumeric';
 }
 
 interface CharactersOption {
