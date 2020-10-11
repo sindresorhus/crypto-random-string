@@ -1,5 +1,5 @@
 'use strict';
-const {promisify} = require('util');
+const {promisify} = require('es6-promisify');
 const crypto = require('crypto');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
