@@ -1,4 +1,4 @@
-# crypto-random-string [![Build Status](https://travis-ci.org/sindresorhus/crypto-random-string.svg?branch=master)](https://travis-ci.org/sindresorhus/crypto-random-string)
+# crypto-random-string
 
 > Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string
 
