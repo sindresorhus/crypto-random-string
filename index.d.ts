@@ -84,7 +84,7 @@ declare const cryptoRandomString: {
 	//=> '2cf05d94db'
 	```
 	*/
-	(options?: cryptoRandomString.Options): string;
+	(options: cryptoRandomString.Options): string;
 
 	/**
 	Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
@@ -99,7 +99,7 @@ declare const cryptoRandomString: {
 	//=> '2cf05d94db'
 	```
 	*/
-	async(options?: cryptoRandomString.Options): Promise<string>;
+	async(options: cryptoRandomString.Options): Promise<string>;
 }
 
 export = cryptoRandomString;
