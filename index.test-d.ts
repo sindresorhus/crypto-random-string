@@ -1,5 +1,5 @@
 import {expectType, expectError} from 'tsd';
-import cryptoRandomString = require('.');
+import cryptoRandomString from './index.js';
 
 expectType<string>(cryptoRandomString({length: 10}));
 expectType<string>(cryptoRandomString({length: 10, type: 'url-safe'}));

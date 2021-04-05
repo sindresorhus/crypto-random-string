@@ -1,6 +1,5 @@
-'use strict';
-const {promisify} = require('util');
-const crypto = require('crypto');
+import {promisify} from 'util';
+import crypto from 'crypto';
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
@@ -71,7 +70,7 @@ const generateRandomBytesAsync = async (byteLength, type, length) => {
 	return buffer.toString(type).slice(0, length);
 };
 
-const allowedTypes = [
+const allowedTypes = new Set([
 	undefined,
 	'hex',
 	'base64',
@@ -80,7 +79,7 @@ const allowedTypes = [
 	'distinguishable',
 	'ascii-printable',
 	'alphanumeric'
-];
+]);
 
 const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({length, type, characters}) => {
 	if (!(length >= 0 && Number.isFinite(length))) {
@@ -95,7 +94,7 @@ const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({
 		throw new TypeError('Expected `characters` to be string');
 	}
 
-	if (!allowedTypes.includes(type)) {
+	if (!allowedTypes.has(type)) {
 		throw new TypeError(`Unknown type: ${type}`);
 	}
 
@@ -142,5 +141,8 @@ const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({
 	return generateForCustomCharacters(length, characters.split(''));
 };
 
-module.exports = createGenerator(generateForCustomCharacters, generateRandomBytes);
-module.exports.async = createGenerator(generateForCustomCharactersAsync, generateRandomBytesAsync);
+const cryptoRandomString = createGenerator(generateForCustomCharacters, generateRandomBytes);
+
+cryptoRandomString.async = createGenerator(generateForCustomCharactersAsync, generateRandomBytesAsync);
+
+export default cryptoRandomString;

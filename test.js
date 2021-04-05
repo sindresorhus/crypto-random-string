@@ -1,7 +1,7 @@
 import test from 'ava';
-import cryptoRandomString from '.';
+import cryptoRandomString from './index.js';
 
-// Probabilistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656
+// Probabilistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656.
 const generatedCharacterSetSize = (options, targetSize) => {
 	const set = new Set();
 	const length = targetSize * 640;
@@ -49,7 +49,7 @@ test('url-safe', t => {
 	t.is(cryptoRandomString({length: 0, type: 'url-safe'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'url-safe'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'url-safe'}).length, 100);
-	t.regex(cryptoRandomString({length: 100, type: 'url-safe'}), /^[a-zA-Z\d._~-]*$/); // Sanity check, probabilistic
+	t.regex(cryptoRandomString({length: 100, type: 'url-safe'}), /^[\w.~-]*$/); // Sanity check, probabilistic
 	t.is(generatedCharacterSetSize({type: 'url-safe'}, 66), 66);
 });
 
@@ -57,7 +57,7 @@ test('numeric', t => {
 	t.is(cryptoRandomString({length: 0, type: 'numeric'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'numeric'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'numeric'}).length, 100);
-	t.regex(cryptoRandomString({length: 100, type: 'numeric'}), /^[\d]*$/); // Sanity check, probabilistic
+	t.regex(cryptoRandomString({length: 100, type: 'numeric'}), /^\d*$/); // Sanity check, probabilistic
 	t.is(generatedCharacterSetSize({type: 'numeric'}, 10), 10);
 });
 
@@ -73,7 +73,7 @@ test('ascii-printable', t => {
 	t.is(cryptoRandomString({length: 0, type: 'ascii-printable'}).length, 0);
 	t.is(cryptoRandomString({length: 10, type: 'ascii-printable'}).length, 10);
 	t.is(cryptoRandomString({length: 100, type: 'ascii-printable'}).length, 100);
-	t.regex(cryptoRandomString({length: 100, type: 'ascii-printable'}), /^[!"#$%&'()*+,-./\d:;<=>?@A-Z[\\\]^_`a-z{|}~]*$/); // Sanity check, probabilistic
+	t.regex(cryptoRandomString({length: 100, type: 'ascii-printable'}), /^[!"#$%&'()*+,-./\w:;<=>?@[\\\]^`{|}~]*$/); // Sanity check, probabilistic
 });
 
 test('alphanumeric', t => {
@@ -95,7 +95,7 @@ test('characters', t => {
 
 test('argument errors', t => {
 	t.throws(() => {
-		cryptoRandomString({length: Infinity});
+		cryptoRandomString({length: Number.POSITIVE_INFINITY});
 	});
 
 	t.throws(() => {
