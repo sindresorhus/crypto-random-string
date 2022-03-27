@@ -1,19 +1,21 @@
-# crypto-random-string
+# crypto-random-string-browserify
+
+This is a fork of [crypto-random-string](https://github.com/sindresorhus/crypto-random-string) and is modified to be used in a browser. It is currently a WIP.
 
 > Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string
 
 Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc.
 
-## Install
+<!-- ## Install
 
 ```
 $ npm install crypto-random-string
-```
+``` -->
 
 ## Usage
 
 ```js
-import cryptoRandomString from 'crypto-random-string';
+import cryptoRandomString from 'crypto-random-string-browserify';
 
 cryptoRandomString({length: 10});
 //=> '2cf05d94db'
@@ -45,16 +47,6 @@ cryptoRandomString({length: 10, characters: 'abc'});
 ### cryptoRandomString(options)
 
 Returns a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
-
-### cryptoRandomString.async(options)
-
-Returns a promise which resolves to a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
-
-For most use-cases, there's really no good reason to use this async version. From the Node.js docs:
-
-> The `crypto.randomBytes()` method will not complete until there is sufficient entropy available. This should normally never take longer than a few milliseconds. The only time when generating the random bytes may conceivably block for a longer period of time is right after boot, when the whole system is still low on entropy.
-
-In general, anything async comes with some overhead on it's own.
 
 #### options
 
@@ -102,15 +94,3 @@ Cannot be set at the same time as the `type` option.
 - [random-obj-key](https://github.com/sindresorhus/random-obj-key) - Get a random key from an object
 - [random-obj-prop](https://github.com/sindresorhus/random-obj-prop) - Get a random property from an object
 - [unique-random](https://github.com/sindresorhus/unique-random) - Generate random numbers that are consecutively unique
-
----
-
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-crypto-random-string?utm_source=npm-crypto-random-string&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>

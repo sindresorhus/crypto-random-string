@@ -1,20 +1,14 @@
 {
-	"name": "crypto-random-string",
-	"version": "4.0.0",
+	"name": "crypto-random-string-browserify",
+	"version": "0.0.0",
 	"description": "Generate a cryptographically strong random string",
 	"license": "MIT",
-	"repository": "sindresorhus/crypto-random-string",
-	"funding": "https://github.com/sponsors/sindresorhus",
+	"repository": "Eddi-S/crypto-random-string-browserify",
 	"author": {
-		"name": "Sindre Sorhus",
-		"email": "sindresorhus@gmail.com",
-		"url": "https://sindresorhus.com"
+		"name": "Eddi"
 	},
 	"type": "module",
 	"exports": "./index.js",
-	"engines": {
-		"node": ">=12"
-	},
 	"scripts": {
 		"test": "xo && ava && tsd"
 	},
