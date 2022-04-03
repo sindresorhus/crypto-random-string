@@ -1,5 +1,5 @@
 import {promisify} from 'util';
-import crypto from 'crypto';
+import crypto from 'crypto-browserify';
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
