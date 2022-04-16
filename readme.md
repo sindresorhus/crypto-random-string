@@ -2,7 +2,7 @@
 
 > Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string
 
-Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc.
+Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc. Works in Node.js and browsers.
 
 ## Install
 
