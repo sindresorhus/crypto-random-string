@@ -2,12 +2,14 @@
 
 > Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string
 
-Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc. Works in Node.js and browsers.
+Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc.
+
+Works in Node.js and browsers.
 
 ## Install
 
-```
-$ npm install crypto-random-string
+```sh
+npm install crypto-random-string
 ```
 
 ## Usage
