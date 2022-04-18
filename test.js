@@ -1,5 +1,5 @@
 import {test} from 'uvu';
-import {is, match, throws} from 'uvu/assert';
+import {is, match, throws} from 'uvu/assert'; // eslint-disable-line node/file-extension-in-import
 import cryptoRandomString, {cryptoRandomStringAsync} from './index.js';
 
 // Probabilistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656.
@@ -24,11 +24,11 @@ test('main', () => {
 });
 
 test('async', async () => {
-	/* eslint-disable unicornn/no-await-expression-member */
+	/* eslint-disable unicorn/no-await-expression-member */
 	is((await cryptoRandomStringAsync({length: 0})).length, 0);
 	is((await cryptoRandomStringAsync({length: 10})).length, 10);
 	is((await cryptoRandomStringAsync({length: 100})).length, 100);
-	/* eslint-enable unicornn/no-await-expression-member */
+	/* eslint-enable unicorn/no-await-expression-member */
 	match(await cryptoRandomStringAsync({length: 100}), /^[a-f\d]*$/); // Sanity check, probabilistic
 });
 
