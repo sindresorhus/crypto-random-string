@@ -1,13 +1,13 @@
-const urlSafeCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'.split('');
-const numericCharacters = '0123456789'.split('');
-const distinguishableCharacters = 'CDEHKMPRTUWXY012458'.split('');
-const asciiPrintableCharacters = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'.split('');
-const alphanumericCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('');
+const urlSafeCharacters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'];
+const numericCharacters = [...'0123456789'];
+const distinguishableCharacters = [...'CDEHKMPRTUWXY012458'];
+const asciiPrintableCharacters = [...'!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'];
+const alphanumericCharacters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'];
 
 const generateForCustomCharacters = (length, characters, randomBytes) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
-	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
+	const maxValidSelector = (Math.floor(0x1_00_00 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
 	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
 	let string = '';
 	let stringLength = 0;
@@ -34,7 +34,7 @@ const generateForCustomCharacters = (length, characters, randomBytes) => {
 const generateForCustomCharactersAsync = async (length, characters, randomBytesAsync) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
-	const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
+	const maxValidSelector = (Math.floor(0x1_00_00 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
 	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
 	let string = '';
 	let stringLength = 0;
@@ -66,7 +66,7 @@ const allowedTypes = new Set([
 	'numeric',
 	'distinguishable',
 	'ascii-printable',
-	'alphanumeric'
+	'alphanumeric',
 ]);
 
 const createGenerator = (generateForCustomCharacters, specialRandomBytes, randomBytes) => ({length, type, characters}) => {
@@ -122,11 +122,11 @@ const createGenerator = (generateForCustomCharacters, specialRandomBytes, random
 		throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
 	}
 
-	if (characters.length > 0x10000) {
+	if (characters.length > 0x1_00_00) {
 		throw new TypeError('Expected `characters` string length to be less or equal to 65536');
 	}
 
-	return generateForCustomCharacters(length, characters.split(''), randomBytes);
+	return generateForCustomCharacters(length, characters, randomBytes);
 };
 
 export function createStringGenerator(specialRandomBytes, randomBytes) {

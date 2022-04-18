@@ -48,7 +48,7 @@ cryptoRandomString({length: 10, characters: 'abc'});
 
 Returns a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
 
-### cryptoRandomString.async(options)
+### cryptoRandomStringAsync(options)
 
 Returns a promise which resolves to a randomized string. [Hex](https://en.wikipedia.org/wiki/Hexadecimal) by default.
 

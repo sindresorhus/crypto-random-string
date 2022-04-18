@@ -68,42 +68,38 @@ interface CharactersOption {
 
 export type Options = BaseOptions & MergeExclusive<TypeOption, CharactersOption>;
 
-declare const cryptoRandomString: {
-	/**
-	Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
+/**
+Generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
 
-	@returns A randomized string.
+@returns A randomized string.
 
-	@example
-	```
-	import cryptoRandomString from 'crypto-random-string';
+@example
+```
+import cryptoRandomString from 'crypto-random-string';
 
-	cryptoRandomString({length: 10});
-	//=> '2cf05d94db'
-	```
-	*/
-	(options: Options): string;
+cryptoRandomString({length: 10});
+//=> '2cf05d94db'
+```
+*/
+export default function cryptoRandomString(options: Options): string;
 
-	/**
-	Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
+/**
+Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
 
-	For most use-cases, there's really no good reason to use this async version. From the Node.js docs:
+For most use-cases, there's really no good reason to use this async version. From the Node.js docs:
 
-	> The `crypto.randomBytes()` method will not complete until there is sufficient entropy available. This should normally never take longer than a few milliseconds. The only time when generating the random bytes may conceivably block for a longer period of time is right after boot, when the whole system is still low on entropy.
+> The `crypto.randomBytes()` method will not complete until there is sufficient entropy available. This should normally never take longer than a few milliseconds. The only time when generating the random bytes may conceivably block for a longer period of time is right after boot, when the whole system is still low on entropy.
 
-	In general, anything async comes with some overhead on it's own.
+In general, anything async comes with some overhead on it's own.
 
-	@returns A promise which resolves to a randomized string.
+@returns A promise which resolves to a randomized string.
 
-	@example
-	```
-	import cryptoRandomString from 'crypto-random-string';
+@example
+```
+import {cryptoRandomStringAsync} from 'crypto-random-string';
 
-	await cryptoRandomString.async({length: 10});
-	//=> '2cf05d94db'
-	```
-	*/
-	async(options: Options): Promise<string>;
-};
-
-export default cryptoRandomString;
+await cryptoRandomStringAsync({length: 10});
+//=> '2cf05d94db'
+```
+*/
+export function cryptoRandomStringAsync(options: Options): Promise<string>;

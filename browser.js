@@ -7,7 +7,7 @@ const decoder = new TextDecoder('utf8');
 const toBase64 = uInt8Array => btoa(decoder.decode(uInt8Array));
 
 // `crypto.getRandomValues` throws an error if too much entropy is requested at once. (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues#exceptions)
-const maxEntropy = 65536;
+const maxEntropy = 65_536;
 
 function getRandomValues(byteLength) {
 	const generatedBytes = [];
@@ -18,7 +18,7 @@ function getRandomValues(byteLength) {
 		byteLength -= bytesToGenerate;
 	}
 
-	const result = new Uint8Array(generatedBytes.reduce((sum, {byteLength}) => sum + byteLength, 0)); // eslint-disable-line unicorn/no-array-reduce
+	const result = new Uint8Array(generatedBytes.reduce((sum, {byteLength}) => sum + byteLength, 0));
 	let currentIndex = 0;
 
 	for (const bytes of generatedBytes) {
@@ -36,7 +36,5 @@ function specialRandomBytes(byteLength, type, length) {
 	return convert(generatedBytes).slice(0, length);
 }
 
-const cryptoRandomString = createStringGenerator(specialRandomBytes, getRandomValues);
-cryptoRandomString.async = createAsyncStringGenerator(specialRandomBytes, getRandomValues);
-
-export default cryptoRandomString;
+export default createStringGenerator(specialRandomBytes, getRandomValues);
+export const cryptoRandomStringAsync = createAsyncStringGenerator(specialRandomBytes, getRandomValues);
