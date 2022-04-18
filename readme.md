@@ -4,10 +4,12 @@
 
 Can be useful for creating an identifier, slug, salt, PIN code, fixture, etc.
 
+Works in Node.js and browsers.
+
 ## Install
 
-```
-$ npm install crypto-random-string
+```sh
+npm install crypto-random-string
 ```
 
 ## Usage
