@@ -4,7 +4,7 @@ const distinguishableCharacters = [...'CDEHKMPRTUWXY012458'];
 const asciiPrintableCharacters = [...'!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'];
 const alphanumericCharacters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'];
 
-const readUInt16LE = (uInt8Array, offset) => uInt8Array[offset] + (uInt8Array[offset + 1] * (2 ** 8));
+const readUInt16LE = (uInt8Array, offset) => uInt8Array[offset] + (uInt8Array[offset + 1] << 8); // eslint-disable-line no-bitwise
 
 const generateForCustomCharacters = (length, characters, randomBytes) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
