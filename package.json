@@ -17,7 +17,7 @@
 		"browser": "./browser.js"
 	},
 	"engines": {
-		"node": ">=14"
+		"node": ">=14.16"
 	},
 	"scripts": {
 		"test": "xo && uvu && tsd"
