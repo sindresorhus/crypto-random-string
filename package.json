@@ -48,6 +48,7 @@
 		"type-fest": "^2.12.2"
 	},
 	"devDependencies": {
+		"dot-prop": "^7.2.0",
 		"tsd": "^0.20.0",
 		"uvu": "^0.5.3",
 		"xo": "^0.48.0"
