@@ -16,8 +16,8 @@ function runTests(test) {
 		const length = targetSize * 640;
 		const string = cryptoRandomString({...options, length});
 
-		for (let i = 0; i < length; i++) {
-			set.add(string[i]);
+		for (let index = 0; index < length; index++) {
+			set.add(string[index]);
 		}
 
 		return set.size;
