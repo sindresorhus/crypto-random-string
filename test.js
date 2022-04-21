@@ -129,15 +129,11 @@ function runTests(test) {
 	test.run();
 }
 
-const nodeTests = suite('Node.js', {
+runTests(suite('Node.js', {
 	cryptoRandomString: nodeCryptoRandomString,
 	cryptoRandomStringAsync: nodeCryptoRandomStringAsync,
-});
-
-const browserTests = suite('Browser', {
+}));
+runTests(suite('Browser', {
 	cryptoRandomString: browserCryptoRandomString,
 	cryptoRandomStringAsync: browserCryptoRandomStringAsync,
-});
-
-runTests(nodeTests);
-runTests(browserTests);
+}));

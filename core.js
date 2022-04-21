@@ -4,6 +4,8 @@ const distinguishableCharacters = [...'CDEHKMPRTUWXY012458'];
 const asciiPrintableCharacters = [...'!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'];
 const alphanumericCharacters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'];
 
+const readUInt16LE = (uInt8Array, offset) => uInt8Array[offset] + (uInt8Array[offset + 1] * (2 ** 8));
+
 const generateForCustomCharacters = (length, characters, randomBytes) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
@@ -17,7 +19,7 @@ const generateForCustomCharacters = (length, characters, randomBytes) => {
 		let entropyPosition = 0;
 
 		while (entropyPosition < entropyLength && stringLength < length) {
-			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			const entropyValue = readUInt16LE(entropy, entropyPosition);
 			entropyPosition += 2;
 			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
 				continue;
@@ -44,7 +46,7 @@ const generateForCustomCharactersAsync = async (length, characters, randomBytesA
 		let entropyPosition = 0;
 
 		while (entropyPosition < entropyLength && stringLength < length) {
-			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			const entropyValue = readUInt16LE(entropy, entropyPosition);
 			entropyPosition += 2;
 			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
 				continue;

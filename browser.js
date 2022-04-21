@@ -1,32 +1,23 @@
 /* eslint-env browser */
 import {createStringGenerator, createAsyncStringGenerator} from './core.js';
 
-const toHex = uInt8Array => uInt8Array.map(byte => byte.toString(16).padStart(2, '0')).join('');
-
-const decoder = new TextDecoder('utf8');
-const toBase64 = uInt8Array => btoa(decoder.decode(uInt8Array));
+const toHex = uInt8Array => [...uInt8Array].map(byte => byte.toString(16).padStart(2, '0')).join('');
+const toBase64 = uInt8Array => btoa(String.fromCodePoint(...uInt8Array));
 
 // `crypto.getRandomValues` throws an error if too much entropy is requested at once. (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues#exceptions)
 const maxEntropy = 65_536;
 
 function getRandomValues(byteLength) {
-	const generatedBytes = [];
+	const generatedBytes = new Uint8Array(byteLength);
 
-	while (byteLength > 0) {
-		const bytesToGenerate = Math.min(byteLength, maxEntropy);
-		generatedBytes.push(crypto.getRandomValues(new Uint8Array({length: bytesToGenerate})));
-		byteLength -= bytesToGenerate;
+	for (let totalGeneratedBytes = 0; totalGeneratedBytes < byteLength; totalGeneratedBytes += maxEntropy) {
+		generatedBytes.set(
+			crypto.getRandomValues(new Uint8Array(Math.min(maxEntropy, byteLength - totalGeneratedBytes))),
+			totalGeneratedBytes,
+		);
 	}
 
-	const result = new Uint8Array(generatedBytes.reduce((sum, {byteLength}) => sum + byteLength, 0));
-	let currentIndex = 0;
-
-	for (const bytes of generatedBytes) {
-		result.set(bytes, currentIndex);
-		currentIndex += bytes.byteLength;
-	}
-
-	return result;
+	return generatedBytes;
 }
 
 function specialRandomBytes(byteLength, type, length) {
