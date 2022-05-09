@@ -58,6 +58,13 @@ For most use-cases, there's really no good reason to use this async version. Fro
 
 In general, anything async comes with some overhead on it's own.
 
+```js
+import {cryptoRandomStringAsync} from 'crypto-random-string';
+
+await cryptoRandomStringAsync({length: 10});
+//=> '2cf05d94db'
+```
+
 #### options
 
 Type: `object`
