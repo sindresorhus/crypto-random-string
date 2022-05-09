@@ -4,8 +4,8 @@ import test from 'ava';
 import browserCryptoRandomString, {cryptoRandomStringAsync as browserCryptoRandomStringAsync} from './browser.js';
 import nodeCryptoRandomString, {cryptoRandomStringAsync as nodeCryptoRandomStringAsync} from './index.js';
 
-if (!hasProperty(globalThis, 'crypto.getRandomValues')) {
-	setProperty(globalThis, 'crypto.getRandomValues', webcrypto.getRandomValues);
+if (!hasProperty(globalThis, 'crypto')) {
+	setProperty(globalThis, 'crypto', webcrypto);
 }
 
 // Probabilistic, result is always less than or equal to actual set size, chance it is less is below 1e-256 for sizes up to 32656.
