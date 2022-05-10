@@ -17,7 +17,7 @@
 		"browser": "./browser.js"
 	},
 	"engines": {
-		"node": ">=12"
+		"node": ">=14.16"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -45,11 +45,12 @@
 		"protect"
 	],
 	"dependencies": {
-		"type-fest": "^1.0.1"
+		"type-fest": "^2.12.2"
 	},
 	"devDependencies": {
-		"ava": "^3.15.0",
-		"tsd": "^0.14.0",
-		"xo": "^0.38.2"
+		"ava": "^4.2.0",
+		"dot-prop": "^7.2.0",
+		"tsd": "^0.20.0",
+		"xo": "^0.48.0"
 	}
 }
