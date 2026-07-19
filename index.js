@@ -1,5 +1,4 @@
-const toHex = uInt8Array => [...uInt8Array].map(byte => byte.toString(16).padStart(2, '0')).join('');
-const toBase64 = uInt8Array => btoa(String.fromCodePoint(...uInt8Array));
+import {uint8ArrayToBase64, uint8ArrayToHex} from 'uint8array-extras';
 
 // `crypto.getRandomValues` throws an error if too much entropy is requested at once. (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues#exceptions)
 const maxEntropy = 65_536;
@@ -8,8 +7,10 @@ function randomBytes(byteLength) {
 	const generatedBytes = new Uint8Array(byteLength);
 
 	for (let totalGeneratedBytes = 0; totalGeneratedBytes < byteLength; totalGeneratedBytes += maxEntropy) {
+		const numberBytes = Math.min(maxEntropy, byteLength - totalGeneratedBytes);
+
 		generatedBytes.set(
-			crypto.getRandomValues(new Uint8Array(Math.min(maxEntropy, byteLength - totalGeneratedBytes))),
+			crypto.getRandomValues(new Uint8Array(numberBytes)),
 			totalGeneratedBytes,
 		);
 	}
@@ -19,7 +20,7 @@ function randomBytes(byteLength) {
 
 function specialRandomBytes(byteLength, type, length) {
 	const generatedBytes = randomBytes(byteLength);
-	const convert = type === 'hex' ? toHex : toBase64;
+	const convert = type === 'hex' ? uint8ArrayToHex : uint8ArrayToBase64;
 
 	return convert(generatedBytes).slice(0, length);
 }
@@ -40,7 +41,7 @@ const generateForCustomCharacters = (length, characters) => {
 	let string = '';
 	let stringLength = 0;
 
-	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
+	function generateOutput() {
 		const entropy = randomBytes(entropyLength);
 		let entropyPosition = 0;
 
@@ -54,6 +55,10 @@ const generateForCustomCharacters = (length, characters) => {
 			string += characters[entropyValue % characterCount];
 			stringLength++;
 		}
+	}
+
+	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
+		generateOutput();
 	}
 
 	return string;

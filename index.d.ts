@@ -1,13 +1,13 @@
-import {MergeExclusive} from 'type-fest';
+import {type MergeExclusive} from 'type-fest';
 
-interface BaseOptions {
+type BaseOptions = {
 	/**
 	Length of the returned string.
 	*/
 	length: number;
-}
+};
 
-interface TypeOption {
+type TypeOption = {
 	/**
 	Use only characters from a predefined set of allowed characters.
 
@@ -46,9 +46,9 @@ interface TypeOption {
 	```
 	*/
 	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable' | 'alphanumeric';
-}
+};
 
-interface CharactersOption {
+type CharactersOption = {
 	/**
 	Use only characters from a custom set of allowed characters.
 
@@ -64,7 +64,7 @@ interface CharactersOption {
 	```
 	*/
 	characters?: string;
-}
+};
 
 export type Options = BaseOptions & MergeExclusive<TypeOption, CharactersOption>;
 
