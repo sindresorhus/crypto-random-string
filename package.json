@@ -16,7 +16,7 @@
 		"default": "./index.js"
 	},
 	"engines": {
-		"node": ">=26"
+		"node": ">=24"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
