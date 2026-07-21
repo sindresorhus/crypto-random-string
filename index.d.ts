@@ -3,6 +3,10 @@ import {type MergeExclusive} from 'type-fest';
 type BaseOptions = {
 	/**
 	Length of the returned string.
+
+	Must be a non-negative integer.
+
+	This is the number of characters, so a string generated from a `characters` set with characters outside the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane), like emoji, has a larger `.length` than this.
 	*/
 	length: number;
 };
@@ -17,7 +21,7 @@ type TypeOption = {
 
 	The `distinguishable` set contains only uppercase characters that are not easily confused: `CDEHKMPRTUWXY012458`. It can be useful if you need to print out a short string that you'd like users to read and type back in with minimal errors. For example, reading a code off of a screen that needs to be typed into a phone to connect two devices.
 
-	The `ascii-printable` set contains all [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters): ``!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~`` Useful for generating passwords where all possible ASCII characters should be used.
+	The `ascii-printable` set contains all [printable ASCII characters](https://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters) except the space: ``!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~`` Useful for generating passwords where all possible ASCII characters should be used.
 
 	The `alphanumeric` set contains uppercase letters, lowercase letters, and digits: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`. Useful for generating [nonce](https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/nonce) values.
 
@@ -53,6 +57,8 @@ type CharactersOption = {
 	Use only characters from a custom set of allowed characters.
 
 	Cannot be set at the same time as the `type` option.
+
+	Each character is picked with equal probability, so repeating a character in the set makes it more likely to be picked. The length limits count Unicode characters, not UTF-16 code units, so characters outside the [Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane), like emoji, are handled correctly.
 
 	Minimum length: `1`
 	Maximum length: `65536`

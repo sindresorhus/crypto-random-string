@@ -1,136 +1,104 @@
 import {uint8ArrayToBase64, uint8ArrayToHex} from 'uint8array-extras';
 
 // `crypto.getRandomValues` throws an error if too much entropy is requested at once. (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues#exceptions)
-const maxEntropy = 65_536;
+const maxBytesPerRequest = 65_536;
 
-function randomBytes(byteLength) {
-	const generatedBytes = new Uint8Array(byteLength);
+// Each character is picked with a single `Uint16` selector value, so a character set cannot be larger than the range of one.
+const maxCharacterSetSize = 0x1_00_00;
 
-	for (let totalGeneratedBytes = 0; totalGeneratedBytes < byteLength; totalGeneratedBytes += maxEntropy) {
-		const numberBytes = Math.min(maxEntropy, byteLength - totalGeneratedBytes);
+function fillWithRandomValues(typedArray) {
+	const maxElementsPerRequest = maxBytesPerRequest / typedArray.BYTES_PER_ELEMENT;
 
-		generatedBytes.set(
-			crypto.getRandomValues(new Uint8Array(numberBytes)),
-			totalGeneratedBytes,
-		);
+	for (let offset = 0; offset < typedArray.length; offset += maxElementsPerRequest) {
+		// `TypedArray#subarray` clamps the end index and shares the underlying buffer, so this fills the array in place without any copying.
+		crypto.getRandomValues(typedArray.subarray(offset, offset + maxElementsPerRequest));
 	}
 
-	return generatedBytes;
+	return typedArray;
 }
 
-function specialRandomBytes(byteLength, type, length) {
-	const generatedBytes = randomBytes(byteLength);
-	const convert = type === 'hex' ? uint8ArrayToHex : uint8ArrayToBase64;
-
-	return convert(generatedBytes).slice(0, length);
-}
-
-const urlSafeCharacters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~'];
-const numericCharacters = [...'0123456789'];
-const distinguishableCharacters = [...'CDEHKMPRTUWXY012458'];
-const asciiPrintableCharacters = [...'!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'];
-const alphanumericCharacters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'];
-
-const readUInt16LE = (uInt8Array, offset) => uInt8Array[offset] + (uInt8Array[offset + 1] << 8); // eslint-disable-line no-bitwise
+const randomBytes = byteLength => fillWithRandomValues(new Uint8Array(byteLength));
 
 const generateForCustomCharacters = (length, characters) => {
 	// Generating entropy is faster than complex math operations, so we use the simplest way
 	const characterCount = characters.length;
-	const maxValidSelector = (Math.floor(0x1_00_00 / characterCount) * characterCount) - 1; // Using values above this will ruin distribution when using modular division
-	const entropyLength = 2 * Math.ceil(1.1 * length); // Generating a bit more than required so chances we need more than one pass will be really low
+	const validSelectorCount = Math.floor(maxCharacterSetSize / characterCount) * characterCount; // Using values at or above this will ruin distribution when using modular division
+	// Generating a bit more than required, adjusted for how many values we expect to discard, so we usually only need one pass
+	const entropyLength = Math.ceil(1.1 * length * (maxCharacterSetSize / validSelectorCount));
 	let string = '';
 	let stringLength = 0;
 
-	function generateOutput() {
-		const entropy = randomBytes(entropyLength);
-		let entropyPosition = 0;
+	while (stringLength < length) {
+		const entropy = fillWithRandomValues(new Uint16Array(entropyLength));
 
-		while (entropyPosition < entropyLength && stringLength < length) {
-			const entropyValue = readUInt16LE(entropy, entropyPosition);
-			entropyPosition += 2;
-			if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
-				continue;
+		for (let index = 0; index < entropyLength; index++) {
+			const entropyValue = entropy[index];
+
+			if (entropyValue < validSelectorCount) { // Skip values which will ruin distribution when using modular division
+				string += characters[entropyValue % characterCount];
+				stringLength++;
+
+				if (stringLength === length) {
+					return string;
+				}
 			}
-
-			string += characters[entropyValue % characterCount];
-			stringLength++;
 		}
-	}
-
-	while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
-		generateOutput();
 	}
 
 	return string;
 };
 
-const allowedTypes = new Set([
-	undefined,
-	'hex',
-	'base64',
-	'url-safe',
-	'numeric',
-	'distinguishable',
-	'ascii-printable',
-	'alphanumeric',
+const characterSets = new Map([
+	['url-safe', [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~']],
+	['numeric', [...'0123456789']],
+	['distinguishable', [...'CDEHKMPRTUWXY012458']],
+	['ascii-printable', [...'!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~']],
+	['alphanumeric', [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']],
 ]);
 
+const allowedTypes = new Set(['hex', 'base64', ...characterSets.keys()]);
+
 export default function cryptoRandomString({length, type, characters}) {
-	if (!(length >= 0 && Number.isFinite(length))) {
-		throw new TypeError('Expected a `length` to be a non-negative finite number');
+	if (!Number.isSafeInteger(length) || length < 0) {
+		throw new TypeError('Expected `length` to be a non-negative integer');
 	}
 
 	if (type !== undefined && characters !== undefined) {
 		throw new TypeError('Expected either `type` or `characters`');
 	}
 
-	if (characters !== undefined && typeof characters !== 'string') {
-		throw new TypeError('Expected `characters` to be string');
+	if (characters !== undefined) {
+		if (typeof characters !== 'string') {
+			throw new TypeError('Expected `characters` to be a string');
+		}
+
+		// Spread to keep characters outside the Basic Multilingual Plane, like emoji, intact.
+		const customCharacterSet = [...characters];
+
+		if (customCharacterSet.length === 0) {
+			throw new TypeError('Expected `characters` to contain at least 1 character');
+		}
+
+		if (customCharacterSet.length > maxCharacterSetSize) {
+			throw new TypeError(`Expected \`characters\` to contain at most ${maxCharacterSetSize} characters, got ${customCharacterSet.length}`);
+		}
+
+		return generateForCustomCharacters(length, customCharacterSet);
 	}
 
-	if (!allowedTypes.has(type)) {
+	if (type !== undefined && !allowedTypes.has(type)) {
 		throw new TypeError(`Unknown type: ${type}`);
 	}
 
-	if (type === undefined && characters === undefined) {
-		type = 'hex';
-	}
+	const characterSet = characterSets.get(type);
 
-	if (type === 'hex' || (type === undefined && characters === undefined)) {
-		return specialRandomBytes(Math.ceil(length * 0.5), 'hex', length); // Needs 0.5 bytes of entropy per character
+	if (characterSet !== undefined) {
+		return generateForCustomCharacters(length, characterSet);
 	}
 
 	if (type === 'base64') {
-		return specialRandomBytes(Math.ceil(length * 0.75), 'base64', length); // Needs 0.75 bytes of entropy per character
+		return uint8ArrayToBase64(randomBytes(Math.ceil(length * 0.75))).slice(0, length); // Needs 0.75 bytes of entropy per character
 	}
 
-	if (type === 'url-safe') {
-		return generateForCustomCharacters(length, urlSafeCharacters);
-	}
-
-	if (type === 'numeric') {
-		return generateForCustomCharacters(length, numericCharacters);
-	}
-
-	if (type === 'distinguishable') {
-		return generateForCustomCharacters(length, distinguishableCharacters);
-	}
-
-	if (type === 'ascii-printable') {
-		return generateForCustomCharacters(length, asciiPrintableCharacters);
-	}
-
-	if (type === 'alphanumeric') {
-		return generateForCustomCharacters(length, alphanumericCharacters);
-	}
-
-	if (characters.length === 0) {
-		throw new TypeError('Expected `characters` string length to be greater than or equal to 1');
-	}
-
-	if (characters.length > 0x1_00_00) {
-		throw new TypeError('Expected `characters` string length to be less or equal to 65536');
-	}
-
-	return generateForCustomCharacters(length, characters);
+	return uint8ArrayToHex(randomBytes(Math.ceil(length * 0.5))).slice(0, length); // Needs 0.5 bytes of entropy per character
 }
