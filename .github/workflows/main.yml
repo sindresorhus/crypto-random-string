@@ -12,6 +12,8 @@ jobs:
         node-version:
           - 26
           - 24
+          - 22
+          - 20
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
