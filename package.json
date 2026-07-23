@@ -16,7 +16,7 @@
 		"default": "./index.js"
 	},
 	"engines": {
-		"node": ">=20"
+		"node": ">=22"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -48,8 +48,8 @@
 		"uint8array-extras": "^1.5.0"
 	},
 	"devDependencies": {
-		"ava": "^7.0.0",
+		"ava": "^8.0.1",
 		"tsd": "^0.33.0",
-		"xo": "^2.0.2"
+		"xo": "^4.0.0"
 	}
 }
