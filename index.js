@@ -1,3 +1,4 @@
+// TODO: Use Uint8Array#toBase64 and Uint8Array#toHex when targeting Node.js 26
 import {uint8ArrayToBase64, uint8ArrayToHex} from 'uint8array-extras';
 
 // `crypto.getRandomValues` throws an error if too much entropy is requested at once. (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues#exceptions)
