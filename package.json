@@ -13,11 +13,10 @@
 	"type": "module",
 	"exports": {
 		"types": "./index.d.ts",
-		"node": "./index.js",
-		"browser": "./browser.js"
+		"default": "./index.js"
 	},
 	"engines": {
-		"node": ">=14.16"
+		"node": ">=22"
 	},
 	"scripts": {
 		"test": "xo && ava && tsd"
@@ -45,12 +44,12 @@
 		"protect"
 	],
 	"dependencies": {
-		"type-fest": "^2.12.2"
+		"type-fest": "^5.8.0",
+		"uint8array-extras": "^1.5.0"
 	},
 	"devDependencies": {
-		"ava": "^4.2.0",
-		"dot-prop": "^7.2.0",
-		"tsd": "^0.20.0",
-		"xo": "^0.48.0"
+		"ava": "^8.0.1",
+		"tsd": "^0.33.0",
+		"xo": "^4.0.0"
 	}
 }

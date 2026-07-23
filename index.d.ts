@@ -1,13 +1,13 @@
-import {MergeExclusive} from 'type-fest';
+import {type MergeExclusive} from 'type-fest';
 
-interface BaseOptions {
+type BaseOptions = {
 	/**
 	Length of the returned string.
 	*/
 	length: number;
-}
+};
 
-interface TypeOption {
+type TypeOption = {
 	/**
 	Use only characters from a predefined set of allowed characters.
 
@@ -46,9 +46,9 @@ interface TypeOption {
 	```
 	*/
 	type?: 'hex' | 'base64' | 'url-safe' | 'numeric' | 'distinguishable' | 'ascii-printable' | 'alphanumeric';
-}
+};
 
-interface CharactersOption {
+type CharactersOption = {
 	/**
 	Use only characters from a custom set of allowed characters.
 
@@ -64,7 +64,7 @@ interface CharactersOption {
 	```
 	*/
 	characters?: string;
-}
+};
 
 export type Options = BaseOptions & MergeExclusive<TypeOption, CharactersOption>;
 
@@ -82,24 +82,3 @@ cryptoRandomString({length: 10});
 ```
 */
 export default function cryptoRandomString(options: Options): string;
-
-/**
-Asynchronously generate a [cryptographically strong](https://en.wikipedia.org/wiki/Strong_cryptography) random string.
-
-For most use-cases, there's really no good reason to use this async version. From the Node.js docs:
-
-> The `crypto.randomBytes()` method will not complete until there is sufficient entropy available. This should normally never take longer than a few milliseconds. The only time when generating the random bytes may conceivably block for a longer period of time is right after boot, when the whole system is still low on entropy.
-
-In general, anything async comes with some overhead on it's own.
-
-@returns A promise which resolves to a randomized string.
-
-@example
-```
-import {cryptoRandomStringAsync} from 'crypto-random-string';
-
-await cryptoRandomStringAsync({length: 10});
-//=> '2cf05d94db'
-```
-*/
-export function cryptoRandomStringAsync(options: Options): Promise<string>;
